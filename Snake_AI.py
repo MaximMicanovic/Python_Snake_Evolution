@@ -2,10 +2,10 @@ import time, copy, multiprocessing, threading, numpy as np, Network as net, Snak
 from tkinter import *
 from tkinter import ttk
 
-brain = [7, 15, 3]
-amount = 200
-mutation_amount = 0.01
-mutation_chance = 0.05
+brain = [7, 20, 3]
+amount = 1000
+mutation_amount = 0.1
+mutation_chance = 0.01
 chosen = 0.25
 game_size = 15
 creatures = [net.network(brain) for i in range(amount)]
@@ -263,9 +263,9 @@ def evolution_algorithm(gens):
         #results = pool.starmap(play_game, input_list)
 
         #First 100 gens will be the percentage the ai get to make moves
-        moves_ai_percent = 1
-        if(gen < 100):
-            moves_ai_percent  = gen/100
+        #moves_ai_percent = 1
+        if(gen < 10):
+            moves_ai_percent  = gen/10
         for i in range(len(creatures)):
             creatures[i].aichoise = moves_ai_percent
 
@@ -280,8 +280,12 @@ def evolution_algorithm(gens):
         if(gen % 10 == 0):
             print(creatures[0].weight[0][0])
         print(res[0])
-        creatures = net.multiply(sorted_creatures, amount, chosen, mutation_chance, mutation_amount, 0.01)
 
+        creatures = net.multiply(sorted_creatures, amount, chosen, mutation_chance, mutation_amount, 0.9)
+
+        if(len(creatures) < amount):
+            print("Not enough creatures created, stopping evolution")
+            exit(0)
     #creatures[0].save("Snake_100_gen")
     pool.close()
     pool.join()
